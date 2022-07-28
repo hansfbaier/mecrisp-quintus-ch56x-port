@@ -1,0 +1,22 @@
+MEMORY
+{
+	rom  (RX)   : ORIGIN = 0x00000000, LENGTH = 448K
+	ram  (WAIL) : ORIGIN = 0x20000000, LENGTH = 16K
+	RAMX (RWX)  : ORIGIN = 0x20020000, LENGTH = 32K
+}
+
+SECTIONS
+{
+	.text : { *(.text*) } > rom
+	.bss  : { *(.bss*) }  > ram
+
+	.DMADATA :
+    {
+        . = ALIGN(16);
+        PROVIDE( _dmadata_start = .);
+        *(.dmadata*)
+        *(.dmadata.*)
+        . = ALIGN(16);
+       PROVIDE( _dmadata_end = .);
+    } >RAMX AT>rom
+}
