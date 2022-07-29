@@ -139,8 +139,8 @@ serial_qemit:  # ( -- ? ) Ready to send a character ?
   li x8, R8_UART1_TFC
   lb x8, 0(x8)
 
-  li   t0, UART_FIFO_SIZE-1
-  sltu x8, t0, x8
+  li   a4, UART_FIFO_SIZE-1
+  sltu x8, a4, x8
   addi x8, x8, -1
 
   pop x1
@@ -167,9 +167,9 @@ serial_qkey:  # ( -- ? ) Is there a key press ?
   Definition Flag_visible, "reset"
 # -----------------------------------------------------------------------------
   call enable_safe_access
-  li a0, R8_RST_WDOG_CTRL
-  li t0, 0x40 | RB_SOFTWARE_RESET
-  sb t0, 0(a0)
+  li a4, R8_RST_WDOG_CTRL
+  li a5, 0x40 | RB_SOFTWARE_RESET
+  sb a5, 0(a4)
 
   call disable_safe_access
   # Real chip resets now; this jump is just to trap the emulator:
