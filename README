@@ -1,0 +1,29 @@
+I currently only can get this working, if I flash it to the CH569
+with gdb and openocd  over wch-link as follows:
+
+1. Start openocd:
+You have to set the chip into debug mode with the WCHISPTool.exe or https://github.com/hansfbaier/ch569tool
+$ cd "MounRiverInstallDirectory"/MounRiver_Studio*/MRS*/toolchain/OpenOCD/bin
+$ ./openocd -f wch-riscv.cfg 
+
+2. In another shell go to mecrisp-quintus-0.37-experimental/mecrisp-quintus-source/ch569x
+
+3. set ARMGNU to your installed riscv compiler:
+$ export ARMGNU=riscv64-unknown-elf
+
+4. build:
+$ make
+
+5. flash it:
+gdb-multiarch mecrisp-quintus-ch56x.elf
+target extended-remote localhost:3333
+load
+run
+
+done
+
+this will flash the ELF file contents into the device flash.
+
+You probably have to close gdb and openocd and re-power the board to
+get it running for the first time.
+The UART speed of the terminal on UART1 is set to 500000 baud by default.
