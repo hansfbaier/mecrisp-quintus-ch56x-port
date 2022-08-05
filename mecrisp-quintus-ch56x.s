@@ -37,11 +37,15 @@
 # Konstanten für die Größe und Aufteilung des Flash-Speichers
 
 .equ FlashAnfang, 0x00000000 # Start of Flash
-#.equ FlashEnde,   0x00070000 # End   of Flash.  448 kb.
-.equ FlashEnde,   0x00005000 # End   of Flash.  448 kb.
+
+# .equ FlashEnde,   0x00070000 # End   of Flash.  448 kb.
+# Only 64 kB are cached in RAMX and able to run forth code efficiently
+# If we try to run code outside that range it will run at 1/8 speed
+# also writes to it will need a reset in order to appear visibles
+.equ FlashEnde,   0x00010000 # End   of Flash.  64 kb.
 
 .equ FlashDictionaryAnfang, FlashAnfang + 0x4C00 # 19 kb reserved for core.
-.equ FlashDictionaryEnde,   FlashEnde
+.equ FlashDictionaryEnde,   FlashEnde - 0x1000
 
 .equ R8_SAFE_ACCESS_SIG,   0x40001000
 .equ R8_CLK_PLL_DIV,       0x40001008
