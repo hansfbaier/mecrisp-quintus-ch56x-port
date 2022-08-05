@@ -54,7 +54,7 @@ rom_write_enable:
   call  safe_access_mode_on
   li    x14, SPI_ROM_BASE
   li    x15, R8_GLOB_ROM_CFG
-  lb    x16, 0 (x15)
+  lbu   x16, 0 (x15)
   ori   x16, x16, (RB_ROM_DATA_WE | RB_ROM_CODE_WE | RB_ROM_WRITE)
   sb    x16, 0 (x15)
   pop x1
@@ -65,7 +65,7 @@ rom_write_disable:
   call  safe_access_mode_on
   li    x14, SPI_ROM_BASE
   li    x15, R8_GLOB_ROM_CFG
-  lb    x16, 0 (x15)
+  lbu   x16, 0 (x15)
   andi  x16, x16, ~(RB_ROM_DATA_WE | RB_ROM_CODE_WE)
   ori   x16, x16, RB_ROM_WRITE
   sb    x16, 0 (x15)
@@ -99,12 +99,10 @@ rom_data_read:   # ( -- data )
   li     x14, R16_SPI_ROM_CR
 1:
   lb     x15, 0 (x14)
-  slli   x15, x15, 24
-  srai   x15, x15, 24
   bltz   x15, 1b
 
   li     x14, R8_SPI_ROM_DATA
-  lb     x15, 0 (x14)
+  lbu    x15, 0 (x14)
   pushda x15
   pop    x1
   ret
@@ -114,8 +112,6 @@ rom_data_write:   # ( data -- )
   li     x14, R16_SPI_ROM_CR
 1:
   lb     x15, 0 (x14)
-  slli   x15, x15, 24
-  srai   x15, x15, 24
   bltz   x15, 1b
 
   li     x14, R8_SPI_ROM_DATA
@@ -129,8 +125,6 @@ rom_access:   # ( data -- )
   li     x14, R16_SPI_ROM_CR
 1:
   lb     x15, 0 (x14)
-  slli   x15, x15, 24
-  srai   x15, x15, 24
   bltz   x15, 1b
 
   popda  x15
@@ -178,7 +172,7 @@ rom_write_start:  # ( -- )
 rom_write_end:   # ( -- status )
   push    x1
   call    rom_access_end
-  li      x14, 0x280000  # counter
+  li      x25, 0x280000  # counter
 
 1:
   li      x15, ROM_END_WRITE
@@ -190,8 +184,8 @@ rom_write_end:   # ( -- status )
   call    rom_access_end
   popda   x15
   andi    x15, x15, 1
-  addi    x14, x14, -1
-  beqz    x14, 2f
+  addi    x25, x25, -1
+  beqz    x25, 2f
   beqz    x15, 1b
 
   pushda  zero
@@ -210,7 +204,8 @@ rom_write_word:   # ( data addr -- )
   andi    x14, x14, ~0b11
   li      x15, ROM_ADDR_OFFSET
   add     x14, x14, x15     # x14: rom-address
-  pushda  x14
+  mv      x20, x14          # x20: rom-address
+  popda   x21               # x21: data
 
   li      x15, ROM_END
   bge     x14, x15, 2f
@@ -218,13 +213,13 @@ rom_write_word:   # ( data addr -- )
   call    rom_write_enable
 1:
   call    rom_write_start
+  pushda  x20
   call    rom_write_addr
   li      x14, R32_SPI_ROM_DATA
-  popda   x15
-  sw      x15, 0 (x14)
+  sw      x21, 0 (x14)
 
   li      x14, R16_SPI_ROM_CR
-  lb      x15, 0 (x14)
+  lbu     x15, 0 (x14)
   ori     x15, x15, 0x10
   pushda  x15
   dup

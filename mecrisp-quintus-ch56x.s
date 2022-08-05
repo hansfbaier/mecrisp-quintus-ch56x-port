@@ -31,13 +31,14 @@
 
 # Konstanten für die Größe des Ram-Speichers
 
-.equ RamAnfang,  0x20000000  # Start of RAM           Porting: Change this !
-.equ RamEnde,    0x20004000  # End   of RAM.   16 kb. Porting: Change this !
+.equ RamAnfang,  0x20000000  # Start of RAM
+.equ RamEnde,    0x20004000  # End   of RAM.   16 kb.
 
 # Konstanten für die Größe und Aufteilung des Flash-Speichers
 
-.equ FlashAnfang, 0x00000000 # Start of Flash           Porting: Change this !
-.equ FlashEnde,   0x00070000 # End   of Flash.  448 kb. Porting: Change this !
+.equ FlashAnfang, 0x00000000 # Start of Flash
+#.equ FlashEnde,   0x00070000 # End   of Flash.  448 kb.
+.equ FlashEnde,   0x00005000 # End   of Flash.  448 kb.
 
 .equ FlashDictionaryAnfang, FlashAnfang + 0x4C00 # 19 kb reserved for core.
 .equ FlashDictionaryEnde,   FlashEnde
