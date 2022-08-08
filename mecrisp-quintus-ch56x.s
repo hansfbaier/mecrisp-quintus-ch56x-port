@@ -42,15 +42,24 @@
 # Only 64 kB are cached in RAMX and able to run forth code efficiently
 # If we try to run code outside that range it will run at 1/8 speed
 # also writes to it will need a reset in order to appear visibles
-.equ FlashEnde,   0x00010000 # End   of Flash.  64 kb.
+.equ FlashEnde,   0x0008000 # End   of Flash.  64 kb.
 
-.equ FlashDictionaryAnfang, FlashAnfang + 0x4C00 # 19 kb reserved for core.
-.equ FlashDictionaryEnde,   FlashEnde - 0x1000
+# we need to start at a 64k page boundary because otherwise
+# we could not erase and reprogram flash without erasing
+# parts of the core
+.equ FlashDictionaryAnfang, FlashAnfang + 0x5000
+.equ FlashDictionaryEnde,   FlashEnde
 
 .equ R8_SAFE_ACCESS_SIG,   0x40001000
 .equ R8_CLK_PLL_DIV,       0x40001008
 .equ R8_CLK_CFG_CTRL,      0x4000100A
 .equ RB_CLK_SEL_PLL,       2
+
+.macro dbg, char
+  li    x14, R8_UART1_THR
+  li    x15, \char
+  sb    x15, 0 (x14)
+.endm
 
 # -----------------------------------------------------------------------------
 # Core start
@@ -69,7 +78,7 @@ _vector_base:
   .word   0
   .word   irq_software                /* NMI Handler */
   .word   irq_memfault                /* Hard Fault Handler */
-  .word   0xf7f9bf11
+  .word   0
   .word   0
   .word   0
   .word   0
@@ -164,6 +173,24 @@ Reset: # Forth begins here
   # Initialisation of terminal hardware, without stacks
   call uart_init
 
+
+  # replace the encrypted erased flash pattern with FFFFFFFF
+  # because that is what mecrisp expects when looking for the
+  # end of the flash dictionary
+  li     a0, FlashAnfang
+  li     a1, FlashEnde - 4
+  li     a2, 0xffffffff
+  li     a3, 0xf7f9bf11 # encrypted erased flash
+
+3:
+  lw     t0, 0(a1)    # load word at current location
+  bne    t0, a3, 4f   # check if it contains the erased flash pattern, otherwise we are done
+  sw     a2, 0(a1)    # replace it with 0xffffffff in the flash mirror RAM
+  addi   a1, a1, -4   # next address
+
+  bge    a1, a0, 3b   # repeat until we hit the beginning of flash
+
+4:
   # Catch the pointers for Flash dictionary
   .include "../common/catchflashpointers.s"
 
