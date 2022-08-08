@@ -1,6 +1,7 @@
 #
 #    Mecrisp-Quintus - A native code Forth implementation for RISC-V
 #    Copyright (C) 2018  Matthias Koch
+#    Copyright (C) 2022  Hans Baier <hansfbaier@gmail.com> (CH56x port)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
