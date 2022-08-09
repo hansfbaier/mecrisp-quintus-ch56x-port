@@ -57,7 +57,7 @@
 .equ RB_CLK_SEL_PLL,       2
 
 .macro dbg, char
-  li    x14, R8_UART1_THR
+  li    x14, 0x40003408    # R8_UART1_THR
   li    x15, \char
   sb    x15, 0 (x14)
 .endm
