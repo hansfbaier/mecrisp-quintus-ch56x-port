@@ -72,47 +72,51 @@
 # Vector table
 # -----------------------------------------------------------------------------
 
-vector_table: # Aligned on 512 Byte boundary.
+.global _start
+.align  1
   j Reset
+.align  1
 _vector_base:
+.option norvc;
   .word   0
   .word   0
-  .word   irq_software                /* NMI Handler */
-  .word   irq_memfault                /* Hard Fault Handler */
-  .word   0
-  .word   0
-  .word   0
-  .word   0
-  .word   0
+  j irq_software                /* NMI Handler */
+  j irq_memfault                /* Hard Fault Handler */
+  .word   0xf7f9bf11
   .word   0
   .word   0
   .word   0
-  .word   irq_systick            /* SysTick Handler */
   .word   0
-  .word   irq_software           /* SW Handler */
+  .word   0
+  .word   0
+  .word   0
+  j irq_systick            /* SysTick Handler */
+  .word   0
+  j irq_software           /* SW Handler */
   .word   0
   /* External Interrupts */
-  .word   irq_collection          /* WDOG */
-  .word   irq_collection          /* TMR0 */
-  .word   irq_collection          /* GPIO */
-  .word   irq_collection          /* SPI0 */
-  .word   irq_collection         /* USBSS */
-  .word   irq_collection          /* LINK */
-  .word   irq_timer1              /* TMR1 */
-  .word   irq_timer2              /* TMR2 */
-  .word   irq_collection         /* UART0 */
-  .word   irq_collection         /* USBHS */
-  .word   irq_collection          /* EMMC */
-  .word   irq_collection           /* DVP */
-  .word   irq_collection          /* HSPI */
-  .word   irq_collection          /* SPI1 */
-  .word   irq_collection         /* UART1 */
-  .word   irq_collection         /* UART2 */
-  .word   irq_collection         /* UART3 */
-  .word   irq_collection        /* SERDES */
-  .word   irq_collection           /* ETH */
-  .word   irq_collection           /* PMT */
-  .word   irq_collection          /* ECDC */
+  j irq_collection          /* WDOG */
+  j irq_collection          /* TMR0 */
+  j irq_collection          /* GPIO */
+  j irq_collection          /* SPI0 */
+  j irq_collection         /* USBSS */
+  j irq_collection          /* LINK */
+  j irq_timer1              /* TMR1 */
+  j irq_timer2              /* TMR2 */
+  j irq_collection         /* UART0 */
+  j irq_collection         /* USBHS */
+  j irq_collection          /* EMMC */
+  j irq_collection           /* DVP */
+  j irq_collection          /* HSPI */
+  j irq_collection          /* SPI1 */
+  j irq_collection         /* UART1 */
+  j irq_collection         /* UART2 */
+  j irq_collection         /* UART3 */
+  j irq_collection        /* SERDES */
+  j irq_collection           /* ETH */
+  j irq_collection           /* PMT */
+  j irq_collection          /* ECDC */
+.option rvc;
 
 enable_safe_access:
   li a0, R8_SAFE_ACCESS_SIG
