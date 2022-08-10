@@ -140,6 +140,8 @@ disable_safe_access:
 
 # -----------------------------------------------------------------------------
 Reset: # Forth begins here
+csrrsi zero, mstatus, 8    # MSTATUS: Set Machine Interrupt Enable Bit
+
 # -----------------------------------------------------------------------------
 /* clear dmadata section */
 2:
@@ -152,14 +154,6 @@ Reset: # Forth begins here
   bltu a0, a1, 1b
 
 2:
-	/* enable all interrupts */
-  li t0, 0x88
-  csrs mstatus, t0
-
-	la t0, irq_fault
-  ori t0, t0, 1
-	csrw mtvec, t0
-
   /* init system clock */
   call enable_safe_access
 
@@ -178,7 +172,6 @@ Reset: # Forth begins here
   # Initialisation of terminal hardware, without stacks
   call uart_init
 
-
   # replace the encrypted erased flash pattern with FFFFFFFF
   # because that is what mecrisp expects when looking for the
   # end of the flash dictionary
@@ -196,13 +189,21 @@ Reset: # Forth begins here
   bge    a1, a0, 3b   # repeat until we hit the beginning of flash
 
 4:
+	/* enable all interrupts */
+  li      t0, 0x88
+  csrs    mstatus, t0
+	la      t0, _vector_base
+  ori     t0, t0, 1
+	csrw    mtvec, t0
+	la      t0, init
+	csrw    mepc, t0
+	mret
+
+init:
   # Catch the pointers for Flash dictionary
   .include "../common/catchflashpointers.s"
 
   welcome " for RISC-V 32 IMAC by Matthias Koch, ported to CH56x by Hans Baier\r\n"
-
-  # Memory access errors will go pending, but do not trigger unless interrupts are enabled globally.
-  csrrsi zero, mstatus, 8    # MSTATUS: Set Machine Interrupt Enable Bit
 
   # Ready to fly !
   .include "../common/boot.s"
