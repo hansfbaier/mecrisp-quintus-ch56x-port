@@ -99,22 +99,22 @@ _vector_base:
   j irq_collection          /* TMR0 */
   j irq_collection          /* GPIO */
   j irq_collection          /* SPI0 */
-  j irq_collection         /* USBSS */
+  j irq_usbss               /* USBSS */
   j irq_collection          /* LINK */
   j irq_timer1              /* TMR1 */
   j irq_timer2              /* TMR2 */
-  j irq_collection         /* UART0 */
-  j irq_collection         /* USBHS */
+  j irq_collection          /* UART0 */
+  j irq_usbhs               /* USBHS */
   j irq_collection          /* EMMC */
-  j irq_collection           /* DVP */
-  j irq_collection          /* HSPI */
+  j irq_collection          /* DVP */
+  j irq_hspi                /* HSPI */
   j irq_collection          /* SPI1 */
-  j irq_collection         /* UART1 */
-  j irq_collection         /* UART2 */
-  j irq_collection         /* UART3 */
-  j irq_collection        /* SERDES */
-  j irq_collection           /* ETH */
-  j irq_collection           /* PMT */
+  j irq_collection          /* UART1 */
+  j irq_collection          /* UART2 */
+  j irq_collection          /* UART3 */
+  j irq_serdes              /* SERDES */
+  j irq_collection          /* ETH */
+  j irq_collection          /* PMT */
   j irq_collection          /* ECDC */
 .option rvc;
 

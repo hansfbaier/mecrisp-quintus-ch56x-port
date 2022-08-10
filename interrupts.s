@@ -152,10 +152,15 @@ initinterrupt  collection, irq_collection, unhandled
 # For all these vectors in the interrupt vector table you may wish to use from Forth:
 # -----------------------------------------------------------------------------
 
-initinterrupt  software,   irq_software,   unhandled
 initinterrupt  systick,    irq_systick,    unhandled
+initinterrupt  software,   irq_software,   unhandled
+initinterrupt  memfault,   irq_memfault,   memfault
+
 initinterrupt  timer1,     irq_timer1,     unhandled
 initinterrupt  timer2,     irq_timer2,     unhandled
-initinterrupt  memfault,   irq_memfault,   memfault
+initinterrupt  usbss,      irq_usbss,      unhandled
+initinterrupt  usbhs,      irq_usbhs,      unhandled
+initinterrupt  hspi,       irq_hspi,       unhandled
+initinterrupt  serdes,     irq_serdes,     unhandled
 
 #              Forth-Name  Assembler-Name  Default handler
