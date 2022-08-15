@@ -32,8 +32,9 @@
 
 # Konstanten für die Größe des Ram-Speichers
 
-.equ RamAnfang,  0x20000000  # Start of RAM
-.equ RamEnde,    0x20004000  # End   of RAM.   16 kb.
+.equ RamAnfang,  0x20020000  # Start of RAM
+.equ RamEnde,    0x20030000  # End   of RAM.   64 kb.
+# the area above 64kb is reserved for DMA
 
 # Konstanten für die Größe und Aufteilung des Flash-Speichers
 
@@ -43,7 +44,7 @@
 # Only 64 kB are cached in RAMX and able to run forth code efficiently
 # If we try to run code outside that range it will run at 1/8 speed
 # also writes to it will need a reset in order to appear visibles
-.equ FlashEnde,   0x0008000 # End   of Flash.  64 kb.
+.equ FlashEnde,   0x0008000 # End   of Flash.  32 kb.
 
 # we need to start at a 64k page boundary because otherwise
 # we could not erase and reprogram flash without erasing
