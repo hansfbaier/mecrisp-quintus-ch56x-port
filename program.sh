@@ -1,10 +1,2 @@
-
 #!/bin/bash
-/opt/wch-openocd/bin/openocd -f /opt/wch-openocd/bin/wch-riscv.cfg &
-sleep 1
-nc localhost 4444 <<EOF
-program mecrisp-quintus-ch56x.hex 0 verify
-wlink_reset_resume
-exit
-EOF
-pkill openocd
+/opt/riscv-openocd-wch/bin/openocd -f wch-riscv.cfg -c "program mecrisp-quintus-ch56x.hex 0 verify" -c "wlink_reset_resume" -c exit
