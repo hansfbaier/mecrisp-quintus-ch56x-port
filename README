@@ -19,7 +19,22 @@ $ export ARMGNU=riscv64-unknown-elf
 4. build:
 $ make
 
-5. flash it:
+5. install wch-isp:
+$ git clone https://github.com/hydrausb3/wch-isp
+$ cd wch-isp
+$ make
+$ sudo make install
+$ cd ..
+
+6. Set debug mode on (you need to put the board in bootloader
+   mode by connecting HD0 to GND while powering up the board):
+$ wch-isp debug-on
+
+7. Set the correct flash memory size (you need to put the board in bootloader
+   mode by connecting HD0 to GND while powering up the board):
+$ wch-isp flash64k
+
+8. flash it:
 ./program.sh
 
 this will flash the ELF file contents into the device flash.

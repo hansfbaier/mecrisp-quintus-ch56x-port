@@ -44,7 +44,7 @@
 # Only 64 kB are cached in RAMX and able to run forth code efficiently
 # If we try to run code outside that range it will run at 1/8 speed
 # also writes to it will need a reset in order to appear visibles
-.equ FlashEnde,   0x0008000 # End   of Flash.  32 kb.
+.equ FlashEnde,   0x0010000 # End   of Flash.  64 kb.
 
 # we need to start at a 64k page boundary because otherwise
 # we could not erase and reprogram flash without erasing
@@ -144,17 +144,6 @@ Reset: # Forth begins here
 csrrsi zero, mstatus, 8    # MSTATUS: Set Machine Interrupt Enable Bit
 
 # -----------------------------------------------------------------------------
-/* clear dmadata section */
-2:
-  la a0, _dmadata_start
-  la a1, _dmadata_end
-  bgeu a0, a1, 2f
-1:
-  sw zero, (a0)
-  addi a0, a0, 4
-  bltu a0, a1, 1b
-
-2:
   /* init system clock */
   call enable_safe_access
 

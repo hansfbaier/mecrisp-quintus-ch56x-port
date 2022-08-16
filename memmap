@@ -9,14 +9,4 @@ SECTIONS
 {
 	.text : { *(.text*) } > rom
 	.bss  : { *(.bss*) }  > ramx
-
-	.DMADATA :
-    {
-        . = ALIGN(16);
-        PROVIDE( _dmadata_start = .);
-        *(.dmadata*)
-        *(.dmadata.*)
-        . = ALIGN(16);
-       PROVIDE( _dmadata_end = .);
-    } >ramx AT>rom
 }
