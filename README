@@ -2,8 +2,6 @@ I currently only can get this working, if I flash it to the CH569
 with gdb and openocd  over wch-link as follows:
 
 1. Install openocd
-You have to set the chip into debug mode with wch-isp (https://github.com/hydrausb3/wch-isp):
-$ wch-isp debug-on
 
 $ git clone https://git.minori.work/Embedded_Projects/riscv-openocd-wch
 $ cd riscv-openocd-wch
